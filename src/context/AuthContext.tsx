@@ -46,7 +46,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
     const storedUser = localStorage.getItem("adminUser");
     const storedToken = localStorage.getItem("authToken");
 

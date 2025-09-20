@@ -98,16 +98,16 @@ const ProductsDashboard: React.FC = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>("");
   const [isAdding, setIsAdding] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { t } = useLanguage();
+  const { t, isRTL } = useLanguage();
 
   const itemsPerPage = 10;
 
   const categories = [
-    { id: 1, name: "Body and SkinCare" },
-    { id: 2, name: "Cosmetics" },
-    { id: 3, name: "Hair Care" },
-    { id: 4, name: "Hair Removal" },
-    { id: 5, name: "Personal Fragrance" },
+    { id: 1, name: t("body_skin_care", "products") },
+    { id: 2, name: t("cosmetics", "products") },
+    { id: 3, name: t("hair_care", "products") },
+    { id: 4, name: t("hair_removal", "products") },
+    { id: 5, name: t("personal_fragrance", "products") },
   ];
 
   const brands: Brand[] = [
@@ -179,7 +179,7 @@ const ProductsDashboard: React.FC = () => {
     categoryId: 1,
     category: {
       id: 1,
-      name: "Body and SkinCare",
+      name: t("body_skin_care", "products"),
     },
   };
 
@@ -204,9 +204,9 @@ const ProductsDashboard: React.FC = () => {
       setProducts(data);
       setFilteredProducts(data);
     } catch (err) {
-      setError("Failed to fetch products. Please try again later.");
+      setError(t("failed_fetch_products", "products"));
       console.error("Error fetching products:", err);
-      toast.error("Failed to fetch products. Please try again later.");
+      toast.error(t("failed_fetch_products", "products"));
     } finally {
       setLoading(false);
     }
@@ -277,7 +277,9 @@ const ProductsDashboard: React.FC = () => {
         if (!response.ok) {
           const errorText = await response.text();
           console.error("Server error response:", errorText);
-          throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
+          throw new Error(
+            `HTTP error! status: ${response.status}, response: ${errorText}`
+          );
         }
       } else {
         // Use the regular endpoint if no image is uploaded
@@ -301,11 +303,11 @@ const ProductsDashboard: React.FC = () => {
       setNewProduct(emptyProduct);
       setUploadedImage(null);
       setUploadedImageUrl("");
-      toast.success("Product added successfully!");
+      toast.success(t("product_added_success", "products"));
     } catch (err) {
-      setError("Failed to add product. Please try again.");
+      setError(t("failed_add_product", "products"));
       console.error("Error adding product:", err);
-      toast.error("Failed to add product. Please try again.");
+      toast.error(t("failed_add_product", "products"));
     } finally {
       setIsAdding(false);
     }
@@ -331,24 +333,24 @@ const ProductsDashboard: React.FC = () => {
       await fetchProducts();
       setShowEditModal(false);
       setEditingProduct(null);
-      toast.success("Product updated successfully!");
+      toast.success(t("product_updated_success", "products"));
     } catch (err) {
-      setError("Failed to update product. Please try again.");
+      setError(t("failed_update_product", "products"));
       console.error("Error updating product:", err);
-      toast.error("Failed to update product. Please try again.");
+      toast.error(t("failed_update_product", "products"));
     }
   };
 
   const deleteProduct = async (barcode: string, productName: string) => {
     const result = await Swal.fire({
-      title: "Are you sure?",
-      text: `You are about to delete "${productName}". This action cannot be undone.`,
+      title: t("delete_confirm_title", "common"),
+      text: t("delete_confirm_text", "common").replace("{0}", productName),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
+      confirmButtonText: t("delete_confirm", "common"),
+      cancelButtonText: t("cancel", "common"),
     });
 
     if (result.isConfirmed) {
@@ -365,11 +367,11 @@ const ProductsDashboard: React.FC = () => {
         }
 
         await fetchProducts();
-        toast.success("Product deleted successfully!");
+        toast.success(t("product_deleted_success", "products"));
       } catch (err) {
-        setError("Failed to delete product. Please try again.");
+        setError(t("failed_delete_product", "products"));
         console.error("Error deleting product:", err);
-        toast.error("Failed to delete product. Please try again.");
+        toast.error(t("failed_delete_product", "products"));
       }
     }
   };
@@ -394,11 +396,11 @@ const ProductsDashboard: React.FC = () => {
       await fetchProducts();
       setShowBulkModal(false);
       setBulkJson("");
-      toast.success("Products added successfully!");
+      toast.success(t("products_added_success", "products"));
     } catch (err) {
-      setError("Failed to add products. Please check your JSON format.");
+      setError(t("failed_bulk_add", "products"));
       console.error("Error adding products:", err);
-      toast.error("Failed to add products. Please check your JSON format.");
+      toast.error(t("failed_bulk_add", "products"));
     }
   };
 
@@ -418,53 +420,64 @@ const ProductsDashboard: React.FC = () => {
   const getPageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5;
-    
+
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+      const startPage = Math.max(
+        1,
+        currentPage - Math.floor(maxVisiblePages / 2)
+      );
       const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-      
+
       for (let i = startPage; i <= endPage; i++) {
         pages.push(i);
       }
     }
-    
+
     return pages;
   };
 
   if (loading) {
-    return <p className="text-center p-6">⏳ جاري تحميل المنتجات...</p>;
+    return (
+      <p className="text-center p-6">⏳ {t("loading_products", "products")}</p>
+    );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className={`container mx-auto px-4 py-8 ${isRTL ? "rtl" : "ltr"}`}>
       <ToastContainer position="top-right" autoClose={3000} />
 
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-primary">{t("products")}</h1>
-        <div className="flex space-x-2">
+      <div
+        className={`flex justify-between items-center mb-6 ${
+          isRTL ? "flex-row-reverse" : ""
+        }`}
+      >
+        <h1 className="text-2xl font-bold text-primary">
+          {t("products", "products")}
+        </h1>
+        <div className={`flex space-x-2 ${isRTL ? "space-x-reverse" : ""}`}>
           <button
             className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded disabled:opacity-50"
             onClick={() => setShowAddModal(true)}
             disabled={isAdding}
           >
-            {isAdding ? "Adding..." : t("add_product")}
+            {isAdding ? t("adding", "common") : t("add_product", "products")}
           </button>
           <button
             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
             onClick={() => setShowBulkModal(true)}
           >
-            Bulk Add from JSON
+            {t("bulk_add_json", "products")}
           </button>
         </div>
       </div>
 
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
-          <strong className="font-bold">Error: </strong>
+          <strong className="font-bold">{t("error", "common")}: </strong>
           <span className="block sm:inline">{error}</span>
           <button
             onClick={() => setError(null)}
@@ -485,7 +498,7 @@ const ProductsDashboard: React.FC = () => {
           }`}
           onClick={() => setActiveTab("all")}
         >
-          All
+          {t("all", "products")}
         </button>
         {categories.map((category) => (
           <button
@@ -506,7 +519,7 @@ const ProductsDashboard: React.FC = () => {
       <div className="mb-6">
         <input
           type="text"
-          placeholder="Search by name, brand, or barcode"
+          placeholder={t("search_placeholder", "products")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full px-4 py-2 border border-light rounded focus:outline-none focus:border-primary"
@@ -518,14 +531,20 @@ const ProductsDashboard: React.FC = () => {
         <table className="w-full">
           <thead className="bg-accent-2">
             <tr>
-              <th className="px-4 py-2 text-left">Image</th>
-              <th className="px-4 py-2 text-left">Barcode</th>
-              <th className="px-4 py-2 text-left">Name</th>
-              <th className="px-4 py-2 text-left">Brand</th>
-              <th className="px-4 py-2 text-left">Category</th>
-              <th className="px-4 py-2 text-left">Price</th>
-              <th className="px-4 py-2 text-left">Stock</th>
-              <th className="px-4 py-2 text-left">Actions</th>
+              <th className="px-4 py-2 text-center">{t("image", "products")}</th>
+              <th className="px-4 py-2 text-center">
+                {t("barcode", "products")}
+              </th>
+              <th className="px-4 py-2 text-center">{t("name", "products")}</th>
+              <th className="px-4 py-2 text-center">{t("brand", "products")}</th>
+              <th className="px-4 py-2 text-center">
+                {t("category", "products")}
+              </th>
+              <th className="px-4 py-2 text-center">{t("price", "products")}</th>
+              <th className="px-4 py-2 text-center">{t("stock", "products")}</th>
+              <th className="px-4 py-2 text-center">
+                {t("actions", "products")}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -556,7 +575,9 @@ const ProductsDashboard: React.FC = () => {
                         : "bg-red-100 text-red-800"
                     }`}
                   >
-                    {product.isAvailable ? "In Stock" : "Out of Stock"}
+                    {product.isAvailable
+                      ? t("in_stock", "products")
+                      : t("out_of_stock", "products")}
                   </span>
                 </td>
                 <td className="px-4 py-2">
@@ -564,7 +585,7 @@ const ProductsDashboard: React.FC = () => {
                     className="text-blue-500 hover:text-blue-700 mr-2"
                     onClick={() => openEditModal(product)}
                   >
-                    Edit
+                    {t("edit", "products")}
                   </button>
                   <button
                     className="text-red-500 hover:text-red-700"
@@ -572,7 +593,7 @@ const ProductsDashboard: React.FC = () => {
                       deleteProduct(product.barcode, product.productName)
                     }
                   >
-                    Delete
+                    {t("delete", "products")}
                   </button>
                 </td>
               </tr>
@@ -586,12 +607,12 @@ const ProductsDashboard: React.FC = () => {
         <div className="flex justify-center mt-6 items-center space-x-2">
           <button
             className="px-3 py-1 bg-primary text-white rounded disabled:opacity-50"
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
           >
-            Prev
+            {t("prev", "products")}
           </button>
-          
+
           {getPageNumbers().map((page) => (
             <button
               key={page}
@@ -605,32 +626,38 @@ const ProductsDashboard: React.FC = () => {
               {page}
             </button>
           ))}
-          
+
           <button
             className="px-3 py-1 bg-primary text-white rounded disabled:opacity-50"
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
             disabled={currentPage === totalPages}
           >
-            Next
+            {t("next", "products")}
           </button>
         </div>
       )}
 
       {/* Show Results */}
       <div className="mt-4 text-sm text-gray-600">
-        Showing {paginatedProducts.length} of {filteredProducts.length} products
+        {t("showing_results", "products")
+          .replace("{0}", paginatedProducts.length.toString())
+          .replace("{1}", filteredProducts.length.toString())}
       </div>
 
       {/* Add New Product Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Add New Product</h2>
+            <h2 className="text-xl font-bold mb-4">
+              {t("add_new_product", "products")}
+            </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Barcode *
+                  {t("barcode", "products")} *
                 </label>
                 <input
                   type="text"
@@ -644,7 +671,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Product Name *
+                  {t("name", "products")} *
                 </label>
                 <input
                   type="text"
@@ -661,7 +688,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Brand *
+                  {t("brand", "products")} *
                 </label>
                 <select
                   value={newProduct.brand}
@@ -671,7 +698,7 @@ const ProductsDashboard: React.FC = () => {
                   className="w-full px-3 py-2 border border-light rounded"
                   required
                 >
-                  <option value="">Select a brand</option>
+                  <option value="">{t("select_brand", "products")}</option>
                   {brands.map((brand) => (
                     <option key={brand.id} value={brand.name}>
                       {brand.name}
@@ -681,7 +708,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Category *
+                  {t("category", "products")} *
                 </label>
                 <select
                   value={newProduct.categoryId}
@@ -703,7 +730,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Case Size *
+                  {t("case_size", "products")} *
                 </label>
                 <input
                   type="number"
@@ -721,7 +748,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Cases Per Layer
+                  {t("cases_per_layer", "products")}
                 </label>
                 <input
                   type="number"
@@ -738,7 +765,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Cases Per Pallet
+                  {t("cases_per_pallet", "products")}
                 </label>
                 <input
                   type="number"
@@ -755,7 +782,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Lead Time (Days) *
+                  {t("lead_time_days", "products")} *
                 </label>
                 <input
                   type="number"
@@ -773,7 +800,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Case Price *
+                  {t("case_price", "products")} *
                 </label>
                 <input
                   type="number"
@@ -792,7 +819,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Unit Price *
+                  {t("unit_price", "products")} *
                 </label>
                 <input
                   type="number"
@@ -823,7 +850,7 @@ const ProductsDashboard: React.FC = () => {
                   className="mr-2"
                 />
                 <label htmlFor="isAvailable" className="text-sm font-medium">
-                  Available
+                  {t("available", "products")}
                 </label>
               </div>
             </div>
@@ -831,7 +858,7 @@ const ProductsDashboard: React.FC = () => {
             {/* Loading Images */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">
-                Product Image
+                {t("product_image", "products")}
               </label>
               <div className="flex space-x-4 mb-2">
                 <button
@@ -857,7 +884,7 @@ const ProductsDashboard: React.FC = () => {
                     fileInputRef.current?.click();
                   }}
                 >
-                  Upload Image
+                  {t("upload_image", "common")}
                 </button>
                 <input
                   type="file"
@@ -879,7 +906,7 @@ const ProductsDashboard: React.FC = () => {
                     })
                   }
                   className="w-full px-3 py-2 border border-light rounded"
-                  placeholder="Image URL"
+                  placeholder={t("product_image_url", "products")}
                 />
               ) : (
                 <div>
@@ -897,14 +924,16 @@ const ProductsDashboard: React.FC = () => {
                     className="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300"
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    {uploadedImage ? "Change Image" : "Select Image"}
+                    {uploadedImage
+                      ? t("change_image", "common")
+                      : t("select_image", "common")}
                   </button>
                 </div>
               )}
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">
-                Description
+                {t("description", "products")}
               </label>
               <textarea
                 value={newProduct.description}
@@ -918,7 +947,7 @@ const ProductsDashboard: React.FC = () => {
 
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">
-                Ingredients
+                {t("ingredients", "products")}
               </label>
               <textarea
                 value={newProduct.ingredients}
@@ -931,7 +960,9 @@ const ProductsDashboard: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Usage</label>
+              <label className="block text-sm font-medium mb-1">
+                {t("usage", "products")}
+              </label>
               <textarea
                 value={newProduct.usage}
                 onChange={(e) =>
@@ -952,14 +983,16 @@ const ProductsDashboard: React.FC = () => {
                   setUploadedImageUrl("");
                 }}
               >
-                Cancel
+                {t("cancel", "products")}
               </button>
               <button
                 className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark disabled:opacity-50"
                 onClick={addProduct}
                 disabled={isAdding}
               >
-                {isAdding ? "Adding..." : "Add Product"}
+                {isAdding
+                  ? t("adding", "common")
+                  : t("add_product", "products")}
               </button>
             </div>
           </div>
@@ -969,13 +1002,15 @@ const ProductsDashboard: React.FC = () => {
       {/* Edit Product Modal */}
       {showEditModal && editingProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-screen overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Edit Product</h2>
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4">
+              {t("edit_product", "products")}
+            </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Barcode
+                  {t("barcode", "products")}
                 </label>
                 <input
                   type="text"
@@ -986,7 +1021,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Product Name *
+                  {t("name", "products")} *
                 </label>
                 <input
                   type="text"
@@ -1003,7 +1038,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Brand *
+                  {t("brand", "products")} *
                 </label>
                 <select
                   value={editingProduct.brand}
@@ -1016,7 +1051,7 @@ const ProductsDashboard: React.FC = () => {
                   className="w-full px-3 py-2 border border-light rounded"
                   required
                 >
-                  <option value="">Select a brand</option>
+                  <option value="">{t("select_brand", "products")}</option>
                   {brands.map((brand) => (
                     <option key={brand.id} value={brand.name}>
                       {brand.name}
@@ -1026,7 +1061,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Category *
+                  {t("category", "products")} *
                 </label>
                 <select
                   value={editingProduct.categoryId}
@@ -1048,7 +1083,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Case Size *
+                  {t("case_size", "products")} *
                 </label>
                 <input
                   type="number"
@@ -1066,7 +1101,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Cases Per Layer
+                  {t("cases_per_layer", "products")}
                 </label>
                 <input
                   type="number"
@@ -1083,7 +1118,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Cases Per Pallet
+                  {t("cases_per_pallet", "products")}
                 </label>
                 <input
                   type="number"
@@ -1100,7 +1135,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Lead Time (Days) *
+                  {t("lead_time_days", "products")} *
                 </label>
                 <input
                   type="number"
@@ -1118,7 +1153,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Case Price *
+                  {t("case_price", "products")} *
                 </label>
                 <input
                   type="number"
@@ -1137,7 +1172,7 @@ const ProductsDashboard: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Unit Price *
+                  {t("unit_price", "products")} *
                 </label>
                 <input
                   type="number"
@@ -1171,14 +1206,14 @@ const ProductsDashboard: React.FC = () => {
                   htmlFor="editIsAvailable"
                   className="text-sm font-medium"
                 >
-                  Available
+                  {t("available", "products")}
                 </label>
               </div>
             </div>
 
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">
-                Product Image URL
+                {t("product_image_url", "products")}
               </label>
               <input
                 type="text"
@@ -1190,7 +1225,7 @@ const ProductsDashboard: React.FC = () => {
                   })
                 }
                 className="w-full px-3 py-2 border border-light rounded"
-                placeholder="Image URL"
+                placeholder={t("product_image_url", "products")}
               />
               {editingProduct.productImage && (
                 <div className="mt-2">
@@ -1205,7 +1240,7 @@ const ProductsDashboard: React.FC = () => {
 
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">
-                Description
+                {t("description", "products")}
               </label>
               <textarea
                 value={editingProduct.description}
@@ -1222,7 +1257,7 @@ const ProductsDashboard: React.FC = () => {
 
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">
-                Ingredients
+                {t("ingredients", "products")}
               </label>
               <textarea
                 value={editingProduct.ingredients}
@@ -1238,7 +1273,9 @@ const ProductsDashboard: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Usage</label>
+              <label className="block text-sm font-medium mb-1">
+                {t("usage", "products")}
+              </label>
               <textarea
                 value={editingProduct.usage}
                 onChange={(e) =>
@@ -1257,13 +1294,13 @@ const ProductsDashboard: React.FC = () => {
                 className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
                 onClick={() => setShowEditModal(false)}
               >
-                Cancel
+                {t("cancel", "products")}
               </button>
               <button
                 className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark"
                 onClick={updateProduct}
               >
-                Update Product
+                {t("update_product", "products")}
               </button>
             </div>
           </div>
@@ -1275,12 +1312,12 @@ const ProductsDashboard: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
             <h2 className="text-xl font-bold mb-4">
-              Bulk Add Products from JSON
+              {t("bulk_add_products_json", "products")}
             </h2>
 
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">
-                JSON Data
+                {t("json_data", "products")}
               </label>
               <textarea
                 value={bulkJson}
@@ -1296,13 +1333,13 @@ const ProductsDashboard: React.FC = () => {
                 className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
                 onClick={() => setShowBulkModal(false)}
               >
-                Cancel
+                {t("cancel", "products")}
               </button>
               <button
                 className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
                 onClick={bulkAddProducts}
               >
-                Add Products
+                {t("add_products", "products")}
               </button>
             </div>
           </div>

@@ -3,8 +3,8 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 
 const Profile: React.FC = () => {
-  const { user, token, updateProfile } = useAuth();
-  const { t } = useLanguage();
+  const { token, updateProfile } = useAuth();
+  const { t, isRTL } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -41,7 +41,7 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       if (!token) {
-        setMessage('Please log in first');
+        setMessage(t('please_login_first', 'profile') || 'Please log in first');
         return;
       }
 
@@ -65,12 +65,12 @@ const Profile: React.FC = () => {
           });
           setMessage('');
         } else if (response.status === 401) {
-          setMessage('Your session has expired. Please log in again.');
+          setMessage(t('session_expired', 'profile') || 'Session expired');
         } else {
-          setMessage('Failed to load profile data');
+          setMessage(t('failed_to_load_profile', 'profile') || 'Failed to load profile data');
         }
       } catch (err) {
-        setMessage('Server connection error');
+        setMessage(t('server_connection_error', 'profile') || 'Server connection error');
         console.error('Error fetching profile:', err);
       } finally {
         setIsLoading(false);
@@ -78,7 +78,7 @@ const Profile: React.FC = () => {
     };
 
     fetchProfile();
-  }, [token]);
+  }, [token, t]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -114,20 +114,20 @@ const Profile: React.FC = () => {
     };
 
     if (!formData.firstName.trim()) {
-      errors.firstName = 'First name is required';
+      errors.firstName = t('first_name_required', 'profile') || 'First name is required';
       isValid = false;
     }
 
     if (!formData.email.trim()) {
-      errors.email = 'Email is required';
+      errors.email = t('email_required', 'profile') || 'Email is required';
       isValid = false;
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = 'Invalid email format';
+      errors.email = t('invalid_email_format', 'profile') || 'Invalid email format';
       isValid = false;
     }
 
     if (formData.mobileNumber && !/^[0-9+\-\s()]+$/.test(formData.mobileNumber)) {
-      errors.mobileNumber = 'Invalid phone number format';
+      errors.mobileNumber = t('invalid_phone_format', 'profile') || 'Invalid phone number format';
       isValid = false;
     }
 
@@ -138,7 +138,7 @@ const Profile: React.FC = () => {
   const handleSaveProfile = async () => {
     if (!validateForm()) return;
     if (!token) {
-      setMessage('Please log in first');
+      setMessage(t('please_login_first', 'profile') || 'Please log in first');
       return;
     }
 
@@ -157,17 +157,17 @@ const Profile: React.FC = () => {
       if (response.ok) {
         updateProfile(formData);
         setIsEditing(false);
-        setMessage('Profile updated successfully');
+        setMessage(t('profile_updated_successfully', 'profile') || 'Profile updated successfully');
         setTimeout(() => setMessage(''), 3000);
       } else if (response.status === 400) {
-        setMessage('Invalid data. Please check the fields.');
+        setMessage(t('invalid_data', 'profile') || 'Invalid data');
       } else if (response.status === 401) {
-        setMessage('Your session has expired. Please log in again.');
+        setMessage(t('session_expired', 'profile') || 'Session expired');
       } else {
-        setMessage('Failed to update profile');
+        setMessage(t('failed_to_update_profile', 'profile') || 'Failed to update profile');
       }
     } catch (err) {
-      setMessage('Server connection error');
+      setMessage(t('server_connection_error', 'profile') || 'Server connection error');
       console.error('Error updating profile:', err);
     } finally {
       setIsLoading(false);
@@ -183,12 +183,12 @@ const Profile: React.FC = () => {
     };
 
     if (!passwordData.currentPassword) {
-      errors.currentPassword = 'Current password is required';
+      errors.currentPassword = t('current_password_required', 'profile') || 'Current password is required';
       isValid = false;
     }
 
     if (!passwordData.newPassword) {
-      errors.newPassword = 'New password is required';
+      errors.newPassword = t('new_password_required', 'profile') || 'New password is required';
       isValid = false;
     } else {
       // Check password complexity
@@ -199,25 +199,25 @@ const Profile: React.FC = () => {
       const isLongEnough = passwordData.newPassword.length >= 8;
 
       if (!hasUpperCase) {
-        errors.newPassword = 'Password must include at least one uppercase letter';
+        errors.newPassword = t('password_uppercase', 'profile') || 'Password must include at least one uppercase letter';
         isValid = false;
       } else if (!hasLowerCase) {
-        errors.newPassword = 'Password must include at least one lowercase letter';
+        errors.newPassword = t('password_lowercase', 'profile') || 'Password must include at least one lowercase letter';
         isValid = false;
       } else if (!hasNumbers) {
-        errors.newPassword = 'Password must include at least one number';
+        errors.newPassword = t('password_number', 'profile') || 'Password must include at least one number';
         isValid = false;
       } else if (!hasSpecialChar) {
-        errors.newPassword = 'Password must include at least one special character';
+        errors.newPassword = t('password_special', 'profile') || 'Password must include at least one special character';
         isValid = false;
       } else if (!isLongEnough) {
-        errors.newPassword = 'Password must be at least 8 characters long';
+        errors.newPassword = t('password_length', 'profile') || 'Password must be at least 8 characters long';
         isValid = false;
       }
     }
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
+      errors.confirmPassword = t('passwords_not_match', 'profile') || 'Passwords do not match';
       isValid = false;
     }
 
@@ -228,7 +228,7 @@ const Profile: React.FC = () => {
   const handleChangePassword = async () => {
     if (!validatePassword()) return;
     if (!token) {
-      setMessage('Please log in first');
+      setMessage(t('please_login_first', 'profile') || 'Please log in first');
       return;
     }
 
@@ -248,7 +248,7 @@ const Profile: React.FC = () => {
       });
 
       if (response.ok) {
-        setMessage('Password changed successfully');
+        setMessage(t('password_changed_successfully', 'profile') || 'Password changed successfully');
         setPasswordData({
           currentPassword: '',
           newPassword: '',
@@ -258,14 +258,14 @@ const Profile: React.FC = () => {
         setTimeout(() => setMessage(''), 3000);
       } else if (response.status === 400) {
         const errorData = await response.json();
-        setMessage(errorData.message || 'Current password is incorrect');
+        setMessage(errorData.message || t('current_password_incorrect', 'profile') || 'Current password is incorrect');
       } else if (response.status === 401) {
-        setMessage('Your session has expired. Please log in again.');
+        setMessage(t('session_expired', 'profile') || 'Session expired');
       } else {
-        setMessage('Failed to change password');
+        setMessage(t('failed_to_change_password', 'profile') || 'Failed to change password');
       }
     } catch (err) {
-      setMessage('Server connection error');
+      setMessage(t('server_connection_error', 'profile') || 'Server connection error');
       console.error('Error changing password:', err);
     } finally {
       setIsLoading(false);
@@ -273,31 +273,31 @@ const Profile: React.FC = () => {
   };
 
   const passwordRequirements = (
-    <div className="text-xs mt-1 text-gray-500">
-      Password must contain:
-      <ul className="list-disc list-inside">
-        <li>At least 8 characters</li>
-        <li>One uppercase letter</li>
-        <li>One lowercase letter</li>
-        <li>One number</li>
-        <li>One special character</li>
+    <div className="text-xs mt-1 text-muted">
+      {t('password_must_contain', 'profile') || 'Password must contain:'}
+      <ul className={`list-disc ${isRTL ? 'list-right' : 'list-inside'} mt-1`}>
+        <li>{t('password_min_length', 'profile') || 'At least 8 characters'}</li>
+        <li>{t('password_uppercase', 'profile') || 'One uppercase letter'}</li>
+        <li>{t('password_lowercase', 'profile') || 'One lowercase letter'}</li>
+        <li>{t('password_number', 'profile') || 'One number'}</li>
+        <li>{t('password_special', 'profile') || 'One special character'}</li>
       </ul>
     </div>
   );
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className={`container-custom px-4 py-8 ${isRTL ? 'rtl' : 'ltr'}`}>
         <div className="flex justify-center items-center h-64">
-          <div className="text-xl">Loading...</div>
+          <div className="text-xl text-primary">{t('loading', 'profile')}</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-primary mb-6">Profile</h1>
+    <div className={`container-custom px-4 py-8 ${isRTL ? 'rtl' : 'ltr'}`}>
+      <h1 className="text-2xl font-bold text-primary mb-6">{t('profile', 'profile')}</h1>
 
       {message && (
         <div className={`mb-4 p-3 rounded ${message.includes('successfully') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
@@ -305,35 +305,35 @@ const Profile: React.FC = () => {
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Personal Information</h2>
+      <div className="bg-bg-primary rounded-lg shadow-md p-6 mb-6">
+        <div className={`flex justify-between items-center mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <h2 className="text-xl font-semibold text-primary">{t('personal_information', 'profile')}</h2>
           {!isEditing ? (
             <button
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors"
+              className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded transition-colors"
               onClick={() => setIsEditing(true)}
               disabled={isLoading}
             >
-              Edit
+              {t('edit', 'profile')}
             </button>
           ) : (
-            <div className="space-x-2">
+            <div className={`space-x-2 ${isRTL ? 'space-x-reverse' : ''}`}>
               <button
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded transition-colors"
+                className="bg-accent-1 hover:bg-accent-3 text-white px-4 py-2 rounded transition-colors"
                 onClick={() => {
                   setIsEditing(false);
                   setFormErrors({ firstName: '', lastName: '', email: '', mobileNumber: '' });
                 }}
                 disabled={isLoading}
               >
-                Cancel
+                {t('cancel', 'profile')}
               </button>
               <button
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors"
+                className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded transition-colors"
                 onClick={handleSaveProfile}
                 disabled={isLoading}
               >
-                Save
+                {t('save', 'profile')}
               </button>
             </div>
           )}
@@ -341,7 +341,7 @@ const Profile: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+            <label className="block text-sm font-medium text-secondary mb-1">{t('first_name', 'profile')}</label>
             {isEditing ? (
               <>
                 <input
@@ -349,18 +349,18 @@ const Profile: React.FC = () => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors.firstName ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary ${formErrors.firstName ? 'border-red-500' : 'border-light'}`}
                   disabled={isLoading}
                 />
                 {formErrors.firstName && <p className="text-red-500 text-xs mt-1">{formErrors.firstName}</p>}
               </>
             ) : (
-              <p className="px-3 py-2 bg-gray-50 rounded">{formData.firstName || 'Not specified'}</p>
+              <p className="px-3 py-2 bg-bg-secondary rounded border-light">{formData.firstName || t('not_specified', 'profile')}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+            <label className="block text-sm font-medium text-secondary mb-1">{t('last_name', 'profile')}</label>
             {isEditing ? (
               <>
                 <input
@@ -368,18 +368,18 @@ const Profile: React.FC = () => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors.lastName ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary ${formErrors.lastName ? 'border-red-500' : 'border-light'}`}
                   disabled={isLoading}
                 />
                 {formErrors.lastName && <p className="text-red-500 text-xs mt-1">{formErrors.lastName}</p>}
               </>
             ) : (
-              <p className="px-3 py-2 bg-gray-50 rounded">{formData.lastName || 'Not specified'}</p>
+              <p className="px-3 py-2 bg-bg-secondary rounded border-light">{formData.lastName || t('not_specified', 'profile')}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-secondary mb-1">{t('email', 'common')}</label>
             {isEditing ? (
               <>
                 <input
@@ -387,18 +387,18 @@ const Profile: React.FC = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors.email ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary ${formErrors.email ? 'border-red-500' : 'border-light'}`}
                   disabled={isLoading}
                 />
                 {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
               </>
             ) : (
-              <p className="px-3 py-2 bg-gray-50 rounded">{formData.email || 'Not specified'}</p>
+              <p className="px-3 py-2 bg-bg-secondary rounded border-light">{formData.email || t('not_specified', 'profile')}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+            <label className="block text-sm font-medium text-secondary mb-1">{t('mobile_number', 'profile')}</label>
             {isEditing ? (
               <>
                 <input
@@ -406,47 +406,47 @@ const Profile: React.FC = () => {
                   name="mobileNumber"
                   value={formData.mobileNumber}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors.mobileNumber ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary ${formErrors.mobileNumber ? 'border-red-500' : 'border-light'}`}
                   disabled={isLoading}
                 />
                 {formErrors.mobileNumber && <p className="text-red-500 text-xs mt-1">{formErrors.mobileNumber}</p>}
               </>
             ) : (
-              <p className="px-3 py-2 bg-gray-50 rounded">{formData.mobileNumber || 'Not provided'}</p>
+              <p className="px-3 py-2 bg-bg-secondary rounded border-light">{formData.mobileNumber || t('not_provided', 'profile')}</p>
             )}
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Change Password</h2>
+      <div className="bg-bg-primary rounded-lg shadow-md p-6">
+        <div className={`flex justify-between items-center mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <h2 className="text-xl font-semibold text-primary">{t('change_password', 'profile')}</h2>
           {!isChangingPassword ? (
             <button
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors"
+              className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded transition-colors"
               onClick={() => setIsChangingPassword(true)}
               disabled={isLoading}
             >
-              Change Password
+              {t('change_password', 'profile')}
             </button>
           ) : (
-            <div className="space-x-2">
+            <div className={`space-x-2 ${isRTL ? 'space-x-reverse' : ''}`}>
               <button
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded transition-colors"
+                className="bg-accent-1 hover:bg-accent-3 text-white px-4 py-2 rounded transition-colors"
                 onClick={() => {
                   setIsChangingPassword(false);
                   setPasswordErrors({ currentPassword: '', newPassword: '', confirmPassword: '' });
                 }}
                 disabled={isLoading}
               >
-                Cancel
+                {t('cancel', 'profile')}
               </button>
               <button
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors"
+                className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded transition-colors"
                 onClick={handleChangePassword}
                 disabled={isLoading}
               >
-                Update
+                {t('update', 'profile')}
               </button>
             </div>
           )}
@@ -455,19 +455,19 @@ const Profile: React.FC = () => {
         {isChangingPassword && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+              <label className="block text-sm font-medium text-secondary mb-1">{t('current_password', 'profile')}</label>
               <div className="relative">
                 <input
                   type={showPasswords.current ? "text" : "password"}
                   name="currentPassword"
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
-                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${passwordErrors.currentPassword ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary ${passwordErrors.currentPassword ? 'border-red-500' : 'border-light'}`}
                   disabled={isLoading}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600"
+                  className={`absolute inset-y-0 ${isRTL ? 'left-0 pl-3' : 'right-0 pr-3'} flex items-center text-muted`}
                   onClick={() => togglePasswordVisibility('current')}
                 >
                   {showPasswords.current ? (
@@ -490,19 +490,19 @@ const Profile: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+              <label className="block text-sm font-medium text-secondary mb-1">{t('new_password', 'profile')}</label>
               <div className="relative">
                 <input
                   type={showPasswords.new ? "text" : "password"}
                   name="newPassword"
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
-                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${passwordErrors.newPassword ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary ${passwordErrors.newPassword ? 'border-red-500' : 'border-light'}`}
                   disabled={isLoading}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600"
+                  className={`absolute inset-y-0 ${isRTL ? 'left-0 pl-3' : 'right-0 pr-3'} flex items-center text-muted`}
                   onClick={() => togglePasswordVisibility('new')}
                 >
                   {showPasswords.new ? (
@@ -522,19 +522,19 @@ const Profile: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+              <label className="block text-sm font-medium text-secondary mb-1">{t('confirm_password', 'profile')}</label>
               <div className="relative">
                 <input
                   type={showPasswords.confirm ? "text" : "password"}
                   name="confirmPassword"
                   value={passwordData.confirmPassword}
                   onChange={handlePasswordChange}
-                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${passwordErrors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary ${passwordErrors.confirmPassword ? 'border-red-500' : 'border-light'}`}
                   disabled={isLoading}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600"
+                  className={`absolute inset-y-0 ${isRTL ? 'left-0 pl-3' : 'right-0 pr-3'} flex items-center text-muted`}
                   onClick={() => togglePasswordVisibility('confirm')}
                 >
                   {showPasswords.confirm ? (
