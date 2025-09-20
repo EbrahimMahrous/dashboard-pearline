@@ -1,0 +1,259 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================= Global Color Variables ========================= */
+:root {
+  /* Primary Colors - Updated with new color scheme */
+  --color-primary: #22a4e6;
+  --color-primary-dark: #1a7cb4;
+  --color-primary-light: #4bb9f5;
+
+  /* Accent Colors - Updated to complement primary color */
+  --color-accent-1: #2d4a5c;
+  --color-accent-2: #e6f4fa;
+  --color-accent-3: #4a8eab;
+  --color-accent-4: #1e9bda;
+  --color-accent-4-dark: #1677a8;
+
+  /* Background Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f9fc;
+
+  /* Text Colors */
+  --text-primary: #1a2a32;
+  --text-secondary: #3d4e5d;
+  --text-white: #ffffff;
+  --text-muted: #6b7a85;
+
+  /* Border Colors */
+  --border-light: #d1e0e9;
+  --border-medium: #9bbbcb;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(34, 164, 230, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(34, 164, 230, 0.1),
+    0 2px 4px -2px rgba(34, 164, 230, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(34, 164, 230, 0.1),
+    0 4px 6px -2px rgba(34, 164, 230, 0.05);
+}
+
+/* ========================= Utility Classes - Text ========================= */
+.text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-white {
+  color: var(--text-white);
+}
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* ========================= Utility Classes - Background ========================= */
+.bg-primary {
+  background-color: var(--color-primary);
+}
+.bg-primary-dark {
+  background-color: var(--color-primary-dark);
+}
+.bg-primary-light {
+  background-color: var(--color-primary-light);
+}
+.bg-accent-4 {
+  background-color: var(--color-accent-4);
+}
+.bg-accent-3 {
+  background-color: var(--color-accent-3);
+}
+.bg-accent-1 {
+  background-color: var(--color-accent-1);
+}
+.bg-accent-2 {
+  background-color: var(--color-accent-2);
+}
+.bg-bg-primary {
+  background-color: var(--bg-primary);
+}
+.bg-bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+/* ========================= Utility Classes - Hover ========================= */
+.hover-primary:hover {
+  background-color: var(--color-primary-dark);
+  color: var(--text-white);
+}
+.hover-accent-4:hover {
+  background-color: var(--color-accent-4-dark);
+  color: var(--text-white);
+}
+.hover-accent-3:hover {
+  background-color: #3a7a96;
+  color: var(--text-white);
+}
+
+/* ========================= Utility Classes - Borders ========================= */
+.border-light {
+  border-color: var(--border-light);
+}
+.border-medium {
+  border-color: var(--border-medium);
+}
+
+/* ========================= Utility Classes - Shadows ========================= */
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+/* ========================= Responsive Container ========================= */
+.container-custom {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-custom {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+  .container-custom {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .container-custom {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+  .container-custom {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  .container-custom {
+    max-width: 1536px;
+  }
+}
+
+/* ========================= Animations ========================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+/* ========================= RTL Support ========================= */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+.rtl .text-right {
+  text-align: right;
+}
+
+.ltr .text-right {
+  text-align: right;
+}
+
+.rtl .ml-3 {
+  margin-left: 0;
+  margin-right: 0.75rem;
+}
+
+.rtl .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+.rtl .mr-4 {
+  margin-right: 0;
+  margin-left: 1rem;
+}
+
+.rtl .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  margin-right: 0.5rem;
+  margin-left: 0;
+}
+
+.rtl .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+/* تكييف التصميم للوضع العربي */
+.rtl .flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+/* Perspective */
+.perspective {
+  perspective: 800px;
+}
+
+/* 3D Transform Style */
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Translate Z */
+.translate-z-10 {
+  transform: translateZ(40px);
+}
+.-translate-z-10 {
+  transform: translateZ(-40px);
+}
+
+/* Translate X */
+.translate-x-10 {
+  transform: translateX(40px);
+}
+.-translate-x-10 {
+  transform: translateX(-40px);
+}
+
+/* Translate Y */
+.translate-y-10 {
+  transform: translateY(40px);
+}
+.-translate-y-10 {
+  transform: translateY(-40px);
+}
+
+/* 3D Rotation Animation */
+@keyframes rotate3d {
+  0% {
+    transform: rotateX(0) rotateY(0) rotateZ(0);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+  }
+}
+.animate-rotate3d {
+  animation: rotate3d 3s linear infinite;
+}
