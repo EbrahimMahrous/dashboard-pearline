@@ -55,7 +55,7 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-bg-secondary px-4">
       <div className="bg-bg-primary p-8 md:p-10 rounded-2xl shadow-lg w-full max-w-md border border-light">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary mb-2">
+          <h1 className="text-3xl font-bold text-[var(--color-primary)] mb-2">
             {t("login", "login")}
           </h1>
           <p className="text-muted">{t("welcome_message", "dashboard")}</p>
@@ -112,7 +112,7 @@ const Login: React.FC = () => {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 text-primary focus:ring-primary border-medium rounded"
+              className="h-4 w-4 text-[var(--color-primary)] focus:ring-primary border-medium rounded"
               disabled={isLoading}
             />
             <label
@@ -159,18 +159,8 @@ const Login: React.FC = () => {
             )}
           </button>
         </form>
-
-        {/* <div className="mt-6 text-center">
-          <button
-            onClick={() => navigate("/forgot-password")}
-            className="text-accent-4 hover:text-accent-4-dark text-sm font-medium"
-          >
-            {isRTL ? "نسيت كلمة المرور؟" : "Forgot your password?"}
-          </button>
-        </div> */}
       </div>
     </div>
   );
 };
-
 export default Login;

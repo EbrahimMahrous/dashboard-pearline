@@ -1,5 +1,7 @@
-
-export const getFromStorage = <T>(key: string, defaultValue: T | null = null): T | null => {
+export const getFromStorage = <T>(
+  key: string,
+  defaultValue: T | null = null
+): T | null => {
   try {
     const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : defaultValue;
@@ -8,7 +10,6 @@ export const getFromStorage = <T>(key: string, defaultValue: T | null = null): T
     return defaultValue;
   }
 };
-
 
 export const setToStorage = <T>(key: string, value: T): boolean => {
   try {
@@ -20,7 +21,6 @@ export const setToStorage = <T>(key: string, value: T): boolean => {
   }
 };
 
-
 export const removeFromStorage = (key: string): boolean => {
   try {
     localStorage.removeItem(key);
@@ -31,13 +31,12 @@ export const removeFromStorage = (key: string): boolean => {
   }
 };
 
-
 export const clearStorage = (): boolean => {
   try {
     localStorage.clear();
     return true;
   } catch (error) {
-    console.error('Error clearing localStorage:', error);
+    console.error("Error clearing localStorage:", error);
     return false;
   }
 };

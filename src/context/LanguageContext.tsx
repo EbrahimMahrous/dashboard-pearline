@@ -120,6 +120,11 @@ const translations: Record<Language, Record<string, Record<string, string>>> = {
       search_placeholder: "ابحث بالاسم، العلامة التجارية، أو الباركود",
       select_brand: "اختر علامة تجارية",
       select_category: "اختر فئة",
+      update_product: "تحديث المنتج",
+      upload_image: "رفع صورة",
+      change_image: "تغيير الصورة",
+      select_image: "اختر صورة",
+      add_products: "إضافة منتجات",
     },
     orders: {
       orders: "الطلبات",
@@ -220,6 +225,11 @@ const translations: Record<Language, Record<string, Record<string, string>>> = {
       messages: "الرسائل",
       profile: "الملف الشخصي",
       logout: "تسجيل الخروج",
+      admin_panel: "لوحة الإدارة",
+      delete_confirm_title: "هل أنت متأكد؟",
+      delete_confirm_text: "هل أنت متأكد أنك تريد حذف {0}؟",
+      delete_confirm: "نعم، احذفه",
+      brands: "العلامات التجارية"
     },
   },
   en: {
@@ -310,6 +320,12 @@ const translations: Record<Language, Record<string, Record<string, string>>> = {
       search_placeholder: "Search by name, brand, or barcode",
       select_brand: "Select a brand",
       select_category: "Select category",
+      update_product: "Update Product",
+      upload_image: "Upload Image",
+      change_image: "Change Image",
+      select_image: "Select Image",
+      add_products: "Add Products",
+      
     },
     orders: {
       orders: "Orders",
@@ -350,6 +366,12 @@ const translations: Record<Language, Record<string, Record<string, string>>> = {
       no_messages: "No messages found",
       close: "Close",
       view: "View",
+      delete: "Delete",
+      delete_all: "Delete All",
+      delete_confirmation: "Are you sure you want to delete this message?",
+      delete_all_confirmation: "Are you sure you want to delete all messages?",
+      message_deleted: "Message deleted successfully",
+      all_messages_deleted: "All messages deleted successfully",
     },
     profile: {
       please_login_first: "Please log in first",
@@ -405,6 +427,11 @@ const translations: Record<Language, Record<string, Record<string, string>>> = {
       messages: "Messages",
       profile: "Profile",
       logout: "Logout",
+      admin_panel: "Admin Panel",
+      delete_confirm_title: "Are you sure?",
+      delete_confirm_text: "Are you sure you want to delete {0}?",
+      delete_confirm: "Yes, delete it",
+      brands: "Brands"
     },
   },
 };

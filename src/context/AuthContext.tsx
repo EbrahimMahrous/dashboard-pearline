@@ -5,6 +5,7 @@ import React, {
   useEffect,
   type ReactNode,
 } from "react";
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface User {
   id: string;
@@ -12,6 +13,7 @@ interface User {
   lastName: string;
   email: string;
   mobileNumber: string;
+  roles: string[];
 }
 
 interface AuthContextType {
@@ -42,6 +44,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -70,7 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   ): Promise<{ success: boolean; message: string }> => {
     try {
       setLoading(true);
-      const response = await fetch("/api/admin/auth/login", {
+      const response = await fetch(`${API_URL}/admin/auth/login`, {
         method: "POST",
         headers: {
           accept: "*/*",
@@ -91,8 +94,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const authToken = data.token || data.accessToken;
       const userData = data.user || {
         id: data.id || "1",
-        name: data.name || "مدير النظام",
+        firstName: data.firstName || "Admin",
+        lastName: data.lastName || "User",
         email: data.email || email,
+        mobileNumber: data.mobileNumber || "",
+        roles: data.roles || ["Admin"],
       };
 
       setUser(userData);

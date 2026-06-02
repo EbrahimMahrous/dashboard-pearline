@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/pearline/public_html/dashboard/
+    - /bin/cp -R dist/* $DEPLOYPATH

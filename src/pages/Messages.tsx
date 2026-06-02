@@ -11,8 +11,6 @@ interface Message {
   createdAt: string;
   isRead?: boolean;
 }
-
-// Icons SVG
 const SearchIcon = () => (
   <svg
     className="w-5 h-5"
@@ -93,6 +91,7 @@ const Messages: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [loading, setLoading] = useState(true);
+  const API_URL = import.meta.env.VITE_API_URL;
   const { t, isRTL } = useLanguage();
 
   const itemsPerPage = 5;
@@ -100,7 +99,7 @@ const Messages: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/Contact/all");
+        const res = await fetch(`${API_URL}/Contact/all`);
         const data = await res.json();
         setMessages(data.reverse());
       } catch (err) {
@@ -158,7 +157,7 @@ const Messages: React.FC = () => {
         >
           <MessageIcon />
         </div>
-        <h1 className="text-2xl font-bold text-primary">
+        <h1 className="text-2xl font-bold text-[var(--color-primary)]">
           {t("messages", "messages")}
         </h1>
       </div>
@@ -190,7 +189,7 @@ const Messages: React.FC = () => {
           <thead className="bg-accent-2">
             <tr>
               <th
-                className={`px-4 py-3 font-semibold text-primary ${
+                className={`px-4 py-3 font-semibold text-[var(--color-primary)] ${
                   isRTL ? "text-right" : "text-left"
                 }`}
                 dir={isRTL ? "rtl" : "ltr"}
@@ -198,7 +197,7 @@ const Messages: React.FC = () => {
                 {t("name", "common")}
               </th>
               <th
-                className={`px-4 py-3 font-semibold text-primary ${
+                className={`px-4 py-3 font-semibold text-[var(--color-primary)] ${
                   isRTL ? "text-right" : "text-left"
                 }`}
                 dir={isRTL ? "rtl" : "ltr"}
@@ -206,7 +205,7 @@ const Messages: React.FC = () => {
                 {t("email", "common")}
               </th>
               <th
-                className={`px-4 py-3 font-semibold text-primary ${
+                className={`px-4 py-3 font-semibold text-[var(--color-primary)] ${
                   isRTL ? "text-right" : "text-left"
                 }`}
                 dir={isRTL ? "rtl" : "ltr"}
@@ -214,7 +213,7 @@ const Messages: React.FC = () => {
                 {t("phone", "common")}
               </th>
               <th
-                className={`px-4 py-3 font-semibold text-primary ${
+                className={`px-4 py-3 font-semibold text-[var(--color-primary)] ${
                   isRTL ? "text-right" : "text-left"
                 }`}
                 dir={isRTL ? "rtl" : "ltr"}
@@ -222,7 +221,7 @@ const Messages: React.FC = () => {
                 {t("date", "orders")}
               </th>
               <th
-                className={`px-4 py-3 font-semibold text-primary ${
+                className={`px-4 py-3 font-semibold text-[var(--color-primary)] ${
                   isRTL ? "text-right" : "text-left"
                 }`}
                 dir={isRTL ? "rtl" : "ltr"}
@@ -303,11 +302,11 @@ const Messages: React.FC = () => {
                       {isRTL ? (
                         <>
                           {t("view", "messages")}
-                          {/* <EyeIcon className="ml-1" /> */}
+                          <EyeIcon />
                         </>
                       ) : (
                         <>
-                          {/* <EyeIcon className="mr-1" /> */}
+                          <EyeIcon />
                           {t("view", "messages")}
                         </>
                       )}
@@ -367,11 +366,11 @@ const Messages: React.FC = () => {
                 isRTL ? "flex-row-reverse" : ""
               }`}
             >
-              <h2 className="text-xl font-bold text-primary">
+              <h2 className="text-xl font-bold text-[var(--color-primary)]">
                 {t("message_details", "messages")}
               </h2>
               <button
-                className="text-muted hover:text-primary"
+                className="text-muted hover:text-[var(--color-primary)]"
                 onClick={() => setSelectedMessage(null)}
               >
                 <CloseIcon />
@@ -386,7 +385,7 @@ const Messages: React.FC = () => {
                   <p className="text-sm font-semibold text-secondary mb-1">
                     {t("name", "common")}
                   </p>
-                  <p className="text-primary">
+                  <p className="text-[var(--color-primary)]">
                     {selectedMessage.firstName} {selectedMessage.lastName}
                   </p>
                 </div>
@@ -397,7 +396,9 @@ const Messages: React.FC = () => {
                   <p className="text-sm font-semibold text-secondary mb-1">
                     {t("email", "common")}
                   </p>
-                  <p className="text-primary">{selectedMessage.email}</p>
+                  <p className="text-[var(--color-primary)]">
+                    {selectedMessage.email}
+                  </p>
                 </div>
                 <div
                   className={isRTL ? "text-right" : "text-left"}
@@ -406,7 +407,9 @@ const Messages: React.FC = () => {
                   <p className="text-sm font-semibold text-secondary mb-1">
                     {t("phone", "common")}
                   </p>
-                  <p className="text-primary">{selectedMessage.phone}</p>
+                  <p className="text-[var(--color-primary)]">
+                    {selectedMessage.phone}
+                  </p>
                 </div>
                 <div
                   className={isRTL ? "text-right" : "text-left"}
@@ -415,7 +418,7 @@ const Messages: React.FC = () => {
                   <p className="text-sm font-semibold text-secondary mb-1">
                     {t("date", "orders")}
                   </p>
-                  <p className="text-primary">
+                  <p className="text-[var(--color-primary)]">
                     {new Date(selectedMessage.createdAt).toLocaleString(
                       isRTL ? "ar-EG" : "en-US"
                     )}
@@ -430,7 +433,7 @@ const Messages: React.FC = () => {
                   {t("content", "messages")}
                 </p>
                 <p
-                  className="bg-accent-2 p-4 rounded-lg text-primary"
+                  className="bg-accent-2 p-4 rounded-lg text-[var(--color-primary)]"
                   dir={isRTL ? "rtl" : "ltr"}
                 >
                   {selectedMessage.message}
@@ -439,7 +442,7 @@ const Messages: React.FC = () => {
             </div>
             <div className="mt-6 p-6 border-t border-light flex justify-end">
               <button
-                className="bg-accent-2 hover:bg-gray-300 text-primary px-4 py-2 rounded-lg"
+                className="bg-accent-2 hover:bg-gray-300 text-[var(--color-primary)] px-4 py-2 rounded-lg"
                 onClick={() => setSelectedMessage(null)}
               >
                 {t("close", "messages")}

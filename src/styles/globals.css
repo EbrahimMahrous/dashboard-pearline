@@ -2,14 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ========================= Global Color Variables ========================= */
 :root {
-  /* Primary Colors - Updated with new color scheme */
+  /* Primary Colors */
   --color-primary: #22a4e6;
   --color-primary-dark: #1a7cb4;
   --color-primary-light: #4bb9f5;
 
-  /* Accent Colors - Updated to complement primary color */
+  /* Accent Colors */
   --color-accent-1: #2d4a5c;
   --color-accent-2: #e6f4fa;
   --color-accent-3: #4a8eab;
@@ -38,7 +37,7 @@
     0 4px 6px -2px rgba(34, 164, 230, 0.05);
 }
 
-/* ========================= Utility Classes - Text ========================= */
+/* Text  */
 .text-primary {
   color: var(--text-primary);
 }
@@ -52,7 +51,7 @@
   color: var(--text-muted);
 }
 
-/* ========================= Utility Classes - Background ========================= */
+/*  Background  */
 .bg-primary {
   background-color: var(--color-primary);
 }
@@ -80,8 +79,7 @@
 .bg-bg-secondary {
   background-color: var(--bg-secondary);
 }
-
-/* ========================= Utility Classes - Hover ========================= */
+/*  Utility Classes - Hover  */
 .hover-primary:hover {
   background-color: var(--color-primary-dark);
   color: var(--text-white);
@@ -94,16 +92,14 @@
   background-color: #3a7a96;
   color: var(--text-white);
 }
-
-/* ========================= Utility Classes - Borders ========================= */
+/*  Borders  */
 .border-light {
   border-color: var(--border-light);
 }
 .border-medium {
   border-color: var(--border-medium);
 }
-
-/* ========================= Utility Classes - Shadows ========================= */
+/*  Shadows  */
 .shadow-sm {
   box-shadow: var(--shadow-sm);
 }
@@ -114,7 +110,7 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* ========================= Responsive Container ========================= */
+/*  Responsive Container  */
 .container-custom {
   width: 100%;
   margin-left: auto;
@@ -149,7 +145,7 @@
   }
 }
 
-/* ========================= Animations ========================= */
+/*  Animations  */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -163,7 +159,7 @@
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out;
 }
-/* ========================= RTL Support ========================= */
+/*  RTL Support  */
 .rtl {
   direction: rtl;
   text-align: right;
@@ -205,12 +201,9 @@
 .rtl .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 1;
 }
-
-/* تكييف التصميم للوضع العربي */
 .rtl .flex-row-reverse {
   flex-direction: row-reverse;
 }
-
 /* Perspective */
 .perspective {
   perspective: 800px;

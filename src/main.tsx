@@ -10,10 +10,10 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <LanguageProvider>
       <AuthProvider>
-        <BrowserRouter basename="/dashboard-pearline">
+        <BrowserRouter>
           <App />
         </BrowserRouter>
       </AuthProvider>
     </LanguageProvider>
-  </StrictMode>
+  </StrictMode>,
 );
